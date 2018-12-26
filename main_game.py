@@ -1,6 +1,6 @@
 import pygame as pg
 import pyganim
-from Amazing_Maze import Walls, Player
+from Amazing_Maze import Walls, Player, change_hero
 from tiledtmxloader import tmxreader, helperspygame
 
 WIN_WIDTH = 950
@@ -11,14 +11,14 @@ WALL_HEIGHT = 32
 
 FILE_DIR = 'Levels'
 
-test_lvl = ['******1***11****************************',
-            '* *** ** *11*** ** ** * * ***          *',
+test_lvl = ['****************************************',
+            '* *** ** ****** ** ** * * ***          *',
             '*  ** **  **     * ** * *              *',
             '** *  *** ** ***** ** * ***            *',
             '*  *  *   *  **    *  *  *             *',
             '*  **    *** *** **** **** *           *',
             '*                                      *',
-            '****11111******************    *****   *',
+            '***************************    *****   *',
             '* * * * * * * * * * * * * *            *',
             '* * * * * * * * * * * * * *            *',
             '* * * * * * * * * * * * * *            *',
@@ -27,7 +27,7 @@ test_lvl = ['******1***11****************************',
             '*                                      *',
             '*                             ***      *',
             '*                                      *',
-            '*    11111111111111111111111111111     *',
+            '*    ******************************    *',
             '*                                      *',
             '*                                      *',
             '****************************************']
@@ -55,6 +55,8 @@ def main_menu():
     screen.blit(exit, exit_rect)
     pg.display.update()
     running = True
+    choose = False
+    play = False
 
     while running:
         for event in pg.event.get():
@@ -85,12 +87,20 @@ def main_menu():
             if event.type == pg.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     if play_rect.collidepoint(event.pos):
-                        main()
-                        break
+                        play = True
+                        running = False
                     if exit_rect.collidepoint(event.pos):
                         exit()
+                    if change_character_rect.collidepoint(event.pos):
+                        choose = True
+                        running = False
         pg.display.update()
         time.tick(60)
+
+    if choose:
+        change_hero.choose()
+    if play:
+        main()
 
 
 class Camera(object):
@@ -128,17 +138,12 @@ def main():
     x, y = 0, 0
     for row in test_lvl:
         for col in row:
-            if col == '*':
-                wl = Walls.WoodWall(x, y)
-                entities.add(wl)
-                walls.append(wl)
-                screen.blit(wl.image, (x, y))
             if col == ' ':
                 rd = Walls.Road(x, y, test_lvl)
                 road.add(rd)
                 entities.add(rd)
                 screen.blit(rd.image, (x, y))
-            if col == '1':
+            if col == '*':
                 aw = Walls.AnimWall(x, y)
                 entities.add(aw)
                 walls.append(aw)
