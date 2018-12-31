@@ -1,6 +1,7 @@
 import pygame as pg
 from pyganim import *
 from Amazing_Maze import main_game
+from Amazing_Maze import image_render as imr
 
 DISPLAY = (900, 600)
 WIDTH = 150
@@ -49,12 +50,28 @@ class Character(pg.sprite.Sprite):
             back_rect = back_t.get_rect(centerx=120, y=DISPLAY[1]-80)
             go = font.render('выбрать', 1, BLACK)
             go_rect = go.get_rect(centerx=DISPLAY[0]-120, y=DISPLAY[1]-80)
+            # line1 = pg.image.load('Sprites/%s/line1.png' % self.name)
+            # line2 = pg.image.load('Sprites/%s/line2.png' % self.name)
+            # line3 = pg.image.load('Sprites/%s/line3.png' % self.name)
+            # line1_rect = line1.get_rect(x=50, y=150)
+            # line2_rect = line2.get_rect(x = 50, y=200)
+            # line3_rect = line3.get_rect(x=50, y=250)
+            text = pg.Surface(DISPLAY)
+            #рендер текста
+            #imr.image_render(self.name)
+            text = pg.transform.scale(pg.image.load('Sprites/%s/text1.png' % self.name).convert(), (DISPLAY[0]-50, DISPLAY[1]-150))
+            text.set_colorkey((255, 255, 255))
+            text_rect = text.get_rect(x=20, y=20)
             run = True
 
             while run:
                 screen.blit(background, (0, 0))
+                screen.blit(text, text_rect)
                 screen.blit(back_t, back_rect)
                 screen.blit(go, go_rect)
+                # screen.blit(line1, line1_rect)
+                # screen.blit(line2, line2_rect)
+                # screen.blit(line3, line3_rect)
                 for e in pg.event.get():
                     if e.type == pg.QUIT:
                         exit()
@@ -100,8 +117,8 @@ def choose():
     arrow_color = True
 
 
-    my_mother = Character(150, 300, Sveta,"Света", 500, 'sveta')
-    my_father = Character(DISPLAY[0] / 2, 300, Vitalya, "Виталя", 500, 'vitalya')
+    my_mother = Character(150, 300, Sveta,"Света", 500, 'Sveta')
+    my_father = Character(DISPLAY[0] / 2, 300, Vitalya, "Виталя", 500, 'Vitalya')
     my_marina = Character(750, 300, Marina, "Марина", 500, 'marina')
     alina_mother = Character(150, 300, NEWTON, "Татьяна", 500)
     alina_father = Character(DISPLAY[0]/2, 300, NEWTON, "Женя", 1000)

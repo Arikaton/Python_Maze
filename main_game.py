@@ -175,6 +175,8 @@ def main():
             if e.type == pg.QUIT:
                 exit()
             if e.type == pg.KEYDOWN:
+                if e.key == pg.K_f:
+                    coor = hero.rect.topleft
                 if e.key == pg.K_r:
                     hero.rect.topleft = coor
                 if e.key == pg.K_LEFT:
@@ -192,8 +194,6 @@ def main():
                     main_menu()
                     break
             if e.type == pg.KEYUP:
-                if e.key == pg.K_f:
-                    coor = hero.rect.topleft
                 if e.key == pg.K_LEFT:
                     left = False
                 if e.key == pg.K_RIGHT:
@@ -212,7 +212,7 @@ def main():
         if gift.rect.colliderect(hero.rect):
             finish_game()
         pg.display.update()
-        time.tick(120)
+        time.tick(60)
 
 
 if __name__ == '__main__':

@@ -8,7 +8,7 @@ MOVE_SPEED = 8
 COLOR = (0, 0, 0)
 
 #Анимации идут в порядке - лево, право, назад, вперед
-HERO_SPRITES = {'vitalya': [[('Sprites/Vitalya/vl1.png'), ('Sprites/Vitalya/vl1.png'), ('Sprites/Vitalya/vl3.png'), ('Sprites/Vitalya/vl4.png')],
+HERO_SPRITES = {'Vitalya': [[('Sprites/Vitalya/vl1.png'), ('Sprites/Vitalya/vl1.png'), ('Sprites/Vitalya/vl3.png'), ('Sprites/Vitalya/vl4.png')],
                             [('Sprites/Vitalya/vr1.png'), ('Sprites/Vitalya/vr2.png'), ('Sprites/Vitalya/vr3.png'), ('Sprites/Vitalya/vr4.png')],
                             [('Sprites/Vitalya/vb1.png'), ('Sprites/Vitalya/vb2.png'), ('Sprites/Vitalya/vb3.png'), ('Sprites/Vitalya/vb4.png')],
                             [('Sprites/Vitalya/vf1.png'), ('Sprites/Vitalya/vf2.png'), ('Sprites/Vitalya/vf3.png'), ('Sprites/Vitalya/vf4.png')],
@@ -18,7 +18,7 @@ HERO_SPRITES = {'vitalya': [[('Sprites/Vitalya/vl1.png'), ('Sprites/Vitalya/vl1.
                             [('Sprites/Newton/newtonU1.png'), ('Sprites/Newton/newtonU2.png'), ('Sprites/Newton/newtonU3.png'), ('Sprites/Newton/newtonU4.png')],
                             [('Sprites/Newton/newtonD1.png'), ('Sprites/Newton/newtonD2.png'), ('Sprites/Newton/newtonD3.png'), ('Sprites/Newton/newtonD4.png')],
                             (21, 32)],
-                'sveta':   [[('Sprites/Sveta/sl1.png'), ('Sprites/Sveta/sl2.png'), ('Sprites/Sveta/sl3.png'), ('Sprites/Sveta/sl4.png')],
+                'Sveta':   [[('Sprites/Sveta/sl1.png'), ('Sprites/Sveta/sl2.png'), ('Sprites/Sveta/sl3.png'), ('Sprites/Sveta/sl4.png')],
                             [('Sprites/Sveta/sr1.png'), ('Sprites/Sveta/sr2.png'), ('Sprites/Sveta/sr3.png'), ('Sprites/Sveta/sr4.png')],
                             [('Sprites/Sveta/sb1.png'), ('Sprites/Sveta/sb2.png'), ('Sprites/Sveta/sb3.png'), ('Sprites/Sveta/sb4.png')],
                             [('Sprites/Sveta/sf1.png'), ('Sprites/Sveta/sf2.png'), ('Sprites/Sveta/sf3.png'), ('Sprites/Sveta/sf4.png')],
