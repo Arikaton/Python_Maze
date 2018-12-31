@@ -2,6 +2,7 @@ import pygame as pg
 import pyganim
 from Amazing_Maze import Walls, Player, change_hero
 from tiledtmxloader import tmxreader, helperspygame
+from Amazing_Maze import image_parser
 
 WIN_WIDTH = 950
 WIN_HEIGHT = 600
@@ -11,31 +12,17 @@ WALL_HEIGHT = 32
 
 FILE_DIR = 'Levels'
 
-test_lvl = ['****************************************',
-            '* *** ** ****** ** ** * * ***          *',
-            '*  ** **  **     * ** * *              *',
-            '** *  *** ** ***** ** * ***            *',
-            '*  *  *   *  **    *  *  *             *',
-            '*  **    *** *** **** **** *           *',
-            '*                                      *',
-            '***************************    *****   *',
-            '* * * * * * * * * * * * * *            *',
-            '* * * * * * * * * * * * * *            *',
-            '* * * * * * * * * * * * * *            *',
-            '*                                      *',
-            '****************************           *',
-            '*                                      *',
-            '*                             ***      *',
-            '*                                      *',
-            '*    ******************************    *',
-            '*                                      *',
-            '*                                      *',
-            '****************************************']
+test_lvl = image_parser.pars('Levels/level.png')
+for i in range(len(test_lvl[0])):
+    if test_lvl[0][i] == ' ':
+        startx = i
+    if test_lvl[-1][i] == ' ':
+        finishx = i
 
 
 def main_menu():
     pg.init()
-    global screen, time
+    global screen, time, font
 
     font = pg.font.Font(None, 80)
     play = font.render('Играть', 1, (255, 255, 255))
@@ -56,9 +43,10 @@ def main_menu():
     pg.display.update()
     running = True
     choose = False
-    play = False
+    play_v = False
 
     while running:
+        screen.blit(background, (0, 0))
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 exit()
@@ -87,19 +75,22 @@ def main_menu():
             if event.type == pg.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     if play_rect.collidepoint(event.pos):
-                        play = True
+                        play_v = True
                         running = False
                     if exit_rect.collidepoint(event.pos):
                         exit()
                     if change_character_rect.collidepoint(event.pos):
                         choose = True
                         running = False
+        screen.blit(play, play_rect)
+        screen.blit(change_character, change_character_rect)
+        screen.blit(exit, exit_rect)
         pg.display.update()
         time.tick(60)
 
     if choose:
         change_hero.choose()
-    if play:
+    if play_v:
         main()
 
 
@@ -127,12 +118,31 @@ def camera_configure(camera, target_rect):
     return pg.Rect(l, t, w, h)
 
 
+def finish_game():
+    finish1 = font.render('Поздравляю,', 1, (255, 255, 255))
+    finish2 = font.render('Вы выиграли!', 1, (255, 255, 255))
+    finish3 = font.render('Держите ваш подарок', 1, (255, 255, 255))
+
+    finish_rect1 = finish1.get_rect(centerx=WIN_WIDTH/2, centery=WIN_HEIGHT/2-160)
+    finish_rect2 = finish2.get_rect(centerx=WIN_WIDTH / 2, centery=WIN_HEIGHT / 2 - 80)
+    finish_rect3 = finish3.get_rect(centerx=WIN_WIDTH / 2, centery=WIN_HEIGHT / 2)
+    background = pg.transform.scale(pg.image.load('Sprites/Background/main_menu.png'), (WIN_WIDTH, WIN_HEIGHT))
+    screen.blit(background, (0, 0))
+    screen.blit(finish1, finish_rect1)
+    screen.blit(finish2, finish_rect2)
+    screen.blit(finish3, finish_rect3)
+
+
 def main():
+    config = open('config.txt')
+    name = config.read()
+    config.close()
     walls = []
     road = pg.sprite.Group()
-    anim_object = pg.sprite.Group()
+    #anim_object = pg.sprite.Group()
     entities = pg.sprite.Group()
-    hero = Player.Hero(32, 32)
+    hero = Player.Hero(32*startx, 0, name)
+    gift = Walls.Gift(32*finishx, len(test_lvl)*32-32)
     left, right, up, down = False, False, False, False
 
     x, y = 0, 0
@@ -144,15 +154,16 @@ def main():
                 entities.add(rd)
                 screen.blit(rd.image, (x, y))
             if col == '*':
-                aw = Walls.AnimWall(x, y)
-                entities.add(aw)
-                walls.append(aw)
-                anim_object.add(aw)
+                ww = Walls.WoodWall(x, y)
+                entities.add(ww)
+                walls.append(ww)
+                #anim_object.add(aw)
 
             x += WALL_WIDTH
         x = 0
         y += WALL_HEIGHT
     entities.add(hero)
+    entities.add(gift)
 
     total_level_width = len(test_lvl[0])*WALL_WIDTH
     total_level_height = len(test_lvl)*WALL_HEIGHT
@@ -164,6 +175,8 @@ def main():
             if e.type == pg.QUIT:
                 exit()
             if e.type == pg.KEYDOWN:
+                if e.key == pg.K_r:
+                    hero.rect.topleft = coor
                 if e.key == pg.K_LEFT:
                     left = True
                 if e.key == pg.K_RIGHT:
@@ -179,6 +192,8 @@ def main():
                     main_menu()
                     break
             if e.type == pg.KEYUP:
+                if e.key == pg.K_f:
+                    coor = hero.rect.topleft
                 if e.key == pg.K_LEFT:
                     left = False
                 if e.key == pg.K_RIGHT:
@@ -189,12 +204,15 @@ def main():
                     down = False
 
         hero.update(left, right, up, down, walls)
+
         camera.update(hero)
         for e in entities:
             screen.blit(e.image, camera.apply(e))
-        anim_object.update()
+        #anim_object.update()
+        if gift.rect.colliderect(hero.rect):
+            finish_game()
         pg.display.update()
-        time.tick(60)
+        time.tick(120)
 
 
 if __name__ == '__main__':

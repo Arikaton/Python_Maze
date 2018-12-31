@@ -16,20 +16,30 @@ OLEN = [('Sprites/Background/olen1.png'), ('Sprites/Background/olen2.png'), ('Sp
 class WoodWall(pg.sprite.Sprite):
     def __init__(self, x, y):
         pg.sprite.Sprite.__init__(self)
-        self.image = pg.Surface((WALL_WIDTH, WALL_HEIGHT))
-        images = ['Sprites/wood1.png',
-                  'Sprites/wood2.png',
-                  'Sprites/wood3.png',
-                  'Sprites/rock.png',
-                  'Sprites/rock2.png']
-        self.image.blit(pg.image.load(choice(images)), (0, 0))
-        self.rect = pg.Rect(x, y, WALL_WIDTH, WALL_HEIGHT)
+        self.x = x
+        self.y = y
+        images = ['Sprites/Background/snow_wood1.png',
+                  'Sprites/Background/snowmanB1.png',
+                  'Sprites/Background/olen1.png']
+        self.image = pg.image.load(choice(images))
+        self.rect = self.image.get_rect(x=x, y=y)
 
 
-class AnimWall(WoodWall):
+class Gift(pg.sprite.Sprite):
     def __init__(self, x, y):
-        WoodWall.__init__(self, x, y)
+        pg.sprite.Sprite.__init__(self)
+        self.image = pg.image.load('Sprites/Background/gift.png')
+        self.rect = self.image.get_rect(x=x, y=y)
+
+
+class AnimWall(pg.sprite.Sprite):
+    def __init__(self, x, y):
+        pg.sprite.Sprite.__init__(self)
+        self.x = x
+        self.y = y
+        self.image = pg.Surface((32, 32))
         self.image.fill(pg.Color(COLOR))
+        self.rect = self.image.get_rect(x=x, y=y)
         boltanim = []
         for anim in SNOW_WOOD1:
             boltanim.append((anim, ANIMATION_DELAY))
